@@ -1,6 +1,5 @@
 // IRON AXE GEBRUIKEN IPV BRONZE AXE
 
-
 import java.awt.Color;
 import java.awt.Graphics2D;
 
@@ -18,7 +17,7 @@ import java.net.URL;
 // Credits to FVZ
 
 @ScriptManifest(author = "Vainiven", category = Category.WOODCUTTING, description = "Progressive Woodcutter, start at any level. Will cut tree's and willow's until 99. Start on Skilling island with an Iron and Rune axe in inventory or bank!", discord = "Vainven#6986", name = "V-Woodcutter", servers = {
-		"Xeros" }, version = "0.1")
+		"Xeros" }, version = "0.2")
 public class Woodcutter extends Script implements SimplePaintable {
 
 	// Basic Variabelen
@@ -34,12 +33,11 @@ public class Woodcutter extends Script implements SimplePaintable {
 	private int tempLogs;
 
 	// Paint Variabelen
-	private final Color color1 = new Color(153, 255, 153, 0);
-	private final Color color2 = new Color(0, 102, 0);
-	private final Color color3 = new Color(255, 255, 255);
-	private final BasicStroke stroke1 = new BasicStroke(9);
-	private final Font font1 = new Font("Gadugi", 0, 13);
-	private final Image img1 = getImage("https://i.ibb.co/370YRdT/Untitled-1.png");
+	private final Color color1 = new Color(255, 255, 255);
+	private final Font font1 = new Font("Gadugi", 1, 13);
+	private final Font font2 = new Font("Gadugi", 0, 13);
+	private final Image img1 = getImage("https://i.ibb.co/JzN0c0v/Woodcutting.png");
+
 	private Image getImage(String url) {
 		try {
 			return ImageIO.read(new URL(url));
@@ -47,6 +45,7 @@ public class Woodcutter extends Script implements SimplePaintable {
 			return null;
 		}
 	}
+
 	private long startExp;
 
 	// What do I do one time when script starts
@@ -68,7 +67,8 @@ public class Woodcutter extends Script implements SimplePaintable {
 	// What do I loop all the time
 	@Override
 	public void onProcess() {
-		if (!ctx.inventory.inventoryFull() && hasItem(AXE) && !(ctx.skills.getRealLevel(SimpleSkills.Skill.WOODCUTTING) >= 41 && !hasItem(1359))) {
+		if (!ctx.inventory.inventoryFull() && hasItem(AXE)
+				&& !(ctx.skills.getRealLevel(SimpleSkills.Skill.WOODCUTTING) >= 41 && !hasItem(1359))) {
 			cutTree();
 		} else {
 			equipItem(LUMBERJACK_HAT);
@@ -79,11 +79,9 @@ public class Woodcutter extends Script implements SimplePaintable {
 		}
 	}
 
-	
 	// Check of inventory/equipment axe has or not
 	public boolean hasItem(int item) {
-		return (!ctx.inventory.populate().filter(item).isEmpty()
-				|| !ctx.equipment.populate().filter(item).isEmpty());
+		return (!ctx.inventory.populate().filter(item).isEmpty() || !ctx.equipment.populate().filter(item).isEmpty());
 	}
 
 	// Method Cut Tree
@@ -158,7 +156,7 @@ public class Woodcutter extends Script implements SimplePaintable {
 	// What do I do when script closes
 	@Override
 	public void onTerminate() {
-		
+
 	}
 
 	// What do I need to paint
@@ -166,22 +164,16 @@ public class Woodcutter extends Script implements SimplePaintable {
 	public void onPaint(Graphics2D g1) {
 		int woodXp = (int) (ctx.skills.getExperience(SimpleSkills.Skill.WOODCUTTING) - startExp);
 		Graphics2D g = (Graphics2D) g1;
-		g.drawImage(img1, 7, 259, null);
-		g.setColor(color1);
-		g.fillRoundRect(6, 257, 504, 75, 16, 16);
-		g.setColor(color2);
-		g.setStroke(stroke1);
-		g.drawRoundRect(6, 257, 504, 75, 16, 16);
+		g.drawImage(img1, 7, 345, null);
 		g.setFont(font1);
-		g.setColor(color3);
-		g.drawString("  V-WOODCUTTER!", 189, 278);
-		g.drawString("TIME: " + ctx.paint.formatTime(System.currentTimeMillis() - startTime), 19, 279);
-		g.drawString("STATUS: " + status, 19, 300);
-		g.drawString("CHOPPED LOGS: " + (gainedLogs + tempLogs) + " (PER HOUR: " + ctx.paint.formatValue(ctx.paint.valuePerHour(gainedLogs + tempLogs, startTime)) + ")",
-				18, 316);
-		g.drawString("XP/PH: " + formatValue(ctx.paint.valuePerHour(woodXp, startTime)), 411, 280);
-		g.drawString("XP GAINED: " + formatValue(woodXp), 382, 295);
-
+		g.setColor(color1);
+		g.drawString("V-WOODCUTTER", 108, 362);
+		g.setFont(font2);
+		g.drawString("TIME: " + ctx.paint.formatTime(System.currentTimeMillis() - startTime), 132, 380);
+		g.drawString("STATUS: " + status, 133, 395);
+		g.drawString("CHOPPED LOGS: " + (gainedLogs + tempLogs) + " (PER HOUR: " + ctx.paint.formatValue(ctx.paint.valuePerHour(gainedLogs + tempLogs, startTime)) + ")", 230, 380);
+		g.drawString("XP/PH: " + formatValue(ctx.paint.valuePerHour(woodXp, startTime)), 128, 410);
+		g.drawString("XP GAINED: " + formatValue(woodXp), 110, 425);
 	}
 
 	// Configuring amount of XP to 2 decimals
