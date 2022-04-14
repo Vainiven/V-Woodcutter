@@ -87,7 +87,7 @@ public class Woodcutter extends Script implements SimplePaintable {
 	// Method Cut Tree
 	public void cutTree() {
 		if (!ctx.players.getLocal().isAnimating()) {
-			SimpleSceneObject tree = ctx.objects.populate().filter(TREE).nextNearest();
+			SimpleSceneObject<?> tree = ctx.objects.populate().filter(TREE).nextNearest();
 			if (tree != null) {
 				tree.interact(502);
 				status = "Woodcutting";
