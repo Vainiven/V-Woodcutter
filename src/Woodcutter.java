@@ -36,15 +36,7 @@ public class Woodcutter extends Script implements SimplePaintable {
 	private final Color color1 = new Color(255, 255, 255);
 	private final Font font1 = new Font("Gadugi", 1, 13);
 	private final Font font2 = new Font("Gadugi", 0, 13);
-	private final Image img1 = getImage("https://i.ibb.co/JzN0c0v/Woodcutting.png");
-
-	private Image getImage(String url) {
-		try {
-			return ImageIO.read(new URL(url));
-		} catch (IOException e) {
-			return null;
-		}
-	}
+	private final Image img1 = ctx.paint.getImage("https://i.ibb.co/JzN0c0v/Woodcutting.png");
 
 	private long startExp;
 
