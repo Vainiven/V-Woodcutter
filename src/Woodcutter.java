@@ -1,23 +1,22 @@
 
-
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.Image;
 
-import simple.api.actions.*;
-import simple.api.script.*;
-import simple.api.script.interfaces.SimplePaintable;
-import simple.api.wrappers.*;
+import simple.api.actions.SimpleObjectActions;
 import simple.api.filters.SimpleSkills;
-
-import java.awt.*;
-import javax.imageio.ImageIO;
-import java.io.IOException;
-import java.net.URL;
+import simple.api.script.Category;
+import simple.api.script.Script;
+import simple.api.script.ScriptManifest;
+import simple.api.script.interfaces.SimplePaintable;
+import simple.api.wrappers.SimpleGameObject;
+import simple.api.wrappers.SimpleSceneObject;
 
 // Credits to FVZ
 
-@ScriptManifest(author = "Vainiven", category = Category.WOODCUTTING, description = "Progressive Woodcutter, start at any level. Will cut tree's and willow's until 99. Start on Skilling island with an Iron and Rune axe in inventory or bank!", discord = "Vainven#6986", name = "V-Woodcutter", servers = {
-		"Xeros" }, version = "0.2")
+@ScriptManifest(author = "Vainiven", category = Category.WOODCUTTING, description = "Progressive Woodcutter, start at any level. Will cut tree's and willow's until 99. Start anywhere with an Iron and Rune axe in inventory or bank!", discord = "Vainven#6986", name = "V-Woodcutter", servers = {
+		"Xeros" }, version = "0.3")
 public class Woodcutter extends Script implements SimplePaintable {
 
 	// Basic Variabelen
@@ -44,7 +43,7 @@ public class Woodcutter extends Script implements SimplePaintable {
 	@Override
 	public boolean onExecute() {
 		// Basis Variabelen
-		System.out.println("Started Willow CHOPPERT!");
+		System.out.println("Started V-Woodcutter!");
 		startTime = System.currentTimeMillis();
 		status = "Planting Trees";
 		gainedLogs = 0;
@@ -59,15 +58,19 @@ public class Woodcutter extends Script implements SimplePaintable {
 	// What do I loop all the time
 	@Override
 	public void onProcess() {
-		if (!ctx.inventory.inventoryFull() && hasItem(AXE)
-				&& !(ctx.skills.getRealLevel(SimpleSkills.Skill.WOODCUTTING) >= 41 && !hasItem(1359))) {
-			cutTree();
+		if (ctx.players.getLocal().getLocation().getRegionID() == 15159) {
+			if (!ctx.inventory.inventoryFull() && hasItem(AXE)
+					&& !(ctx.skills.getRealLevel(SimpleSkills.Skill.WOODCUTTING) >= 41 && !hasItem(1359))) {
+				cutTree();
+			} else {
+				equipItem(LUMBERJACK_HAT);
+				equipItem(LUMBERJACK_TORSO);
+				equipItem(LUMBERJACK_LEGS);
+				equipItem(LUMBERJACK_BOOTS);
+				bank();
+			}
 		} else {
-			equipItem(LUMBERJACK_HAT);
-			equipItem(LUMBERJACK_TORSO);
-			equipItem(LUMBERJACK_LEGS);
-			equipItem(LUMBERJACK_BOOTS);
-			bank();
+			ctx.teleporter.teleportStringPath("Skilling", "Skilling Island");
 		}
 	}
 
@@ -163,7 +166,10 @@ public class Woodcutter extends Script implements SimplePaintable {
 		g.setFont(font2);
 		g.drawString("TIME: " + ctx.paint.formatTime(System.currentTimeMillis() - startTime), 132, 380);
 		g.drawString("STATUS: " + status, 133, 395);
-		g.drawString("CHOPPED LOGS: " + (gainedLogs + tempLogs) + " (PER HOUR: " + ctx.paint.formatValue(ctx.paint.valuePerHour(gainedLogs + tempLogs, startTime)) + ")", 230, 380);
+		g.drawString(
+				"CHOPPED LOGS: " + (gainedLogs + tempLogs) + " (PER HOUR: "
+						+ ctx.paint.formatValue(ctx.paint.valuePerHour(gainedLogs + tempLogs, startTime)) + ")",
+				230, 380);
 		g.drawString("XP/PH: " + formatValue(ctx.paint.valuePerHour(woodXp, startTime)), 128, 410);
 		g.drawString("XP GAINED: " + formatValue(woodXp), 110, 425);
 	}
