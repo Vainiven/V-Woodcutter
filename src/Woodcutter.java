@@ -59,8 +59,7 @@ public class Woodcutter extends Script implements SimplePaintable {
 	@Override
 	public void onProcess() {
 		if (ctx.players.getLocal().getLocation().getRegionID() == 15159) {
-			if (!ctx.inventory.inventoryFull() && hasItem(AXE)
-					&& !(ctx.skills.getRealLevel(SimpleSkills.Skill.WOODCUTTING) >= 41 && !hasItem(1359))) {
+			if (!ctx.inventory.inventoryFull() && hasItem(AXE) && !(ctx.skills.getRealLevel(SimpleSkills.Skill.WOODCUTTING) >= 41 && !hasItem(1359))) {
 				cutTree();
 			} else {
 				equipItem(LUMBERJACK_HAT);
@@ -96,13 +95,16 @@ public class Woodcutter extends Script implements SimplePaintable {
 
 	// Method Checking Level and Equipping right Axe and Right Tree
 	public void checkLevel() {
-		if (ctx.skills.getRealLevel(SimpleSkills.Skill.WOODCUTTING) < 41) {
+		int checkLevel = ctx.skills.getRealLevel(SimpleSkills.Skill.WOODCUTTING);
+		if (checkLevel < 41) {
 			AXE = 1349;
 			TREE = 1276;
-		} else {
+		} else if (checkLevel > 41 && checkLevel < 75) {
 			AXE = 1359;
 			TREE = 10833;
-
+		} else {
+			AXE = 1359;
+			TREE = 10834;
 		}
 	}
 
