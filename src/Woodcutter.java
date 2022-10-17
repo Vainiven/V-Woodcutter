@@ -80,7 +80,7 @@ public class Woodcutter extends Script implements SimplePaintable {
 
 	// Check of inventory/equipment axe has or not
 	public boolean hasItem(int item) {
-		return (!ctx.inventory.populate().filter(item).isEmpty() || !ctx.equipment.populate().filter(item).isEmpty());
+		return !ctx.inventory.populate().filter(item).isEmpty() || !ctx.equipment.populate().filter(item).isEmpty();
 	}
 
 	// Method Cut Tree
@@ -165,7 +165,7 @@ public class Woodcutter extends Script implements SimplePaintable {
 	@Override
 	public void onPaint(Graphics2D g1) {
 		int woodXp = (int) (ctx.skills.getExperience(SimpleSkills.Skill.WOODCUTTING) - startExp);
-		Graphics2D g = (Graphics2D) g1;
+		Graphics2D g = g1;
 		g.drawImage(img1, 7, 345, null);
 		g.setFont(font1);
 		g.setColor(color1);
@@ -183,7 +183,7 @@ public class Woodcutter extends Script implements SimplePaintable {
 
 	// Configuring amount of XP to 2 decimals
 	public final String formatValue(final long l) {
-		return (l > 1_000_000) ? String.format("%.2fM", ((double) l / 1_000_000))
-				: (l > 1000) ? String.format("%.1fK", ((double) l / 1000)) : l + "";
+		return l > 1_000_000 ? String.format("%.2fM", (double) l / 1_000_000)
+				: l > 1000 ? String.format("%.1fK", (double) l / 1000) : l + "";
 	}
 }
